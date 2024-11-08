@@ -1,8 +1,7 @@
 <script lang="ts">
 import type IProjeto from '@/interfaces/IProjeto'
 import { useStore } from '@/store'
-import { OBTER_PROJETOS } from '@/store/tipoAcao'
-import { EXCLUIR_PROJETO } from '@/store/tipoMutacao'
+import { OBTER_PROJETOS, REMOVER_PROJETO } from '@/store/tipoAcao'
 import { computed, defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
@@ -12,7 +11,7 @@ export default defineComponent({
   methods: {
     excluirProjeto(pProjeto: IProjeto) {
       if (confirm(`Tem certeza que deseja excluir o projeto ${pProjeto.nome}?`)) {
-        this.store.commit(EXCLUIR_PROJETO, pProjeto.id)
+        this.store.dispatch(REMOVER_PROJETO, pProjeto.id)
       }
     },
   },
