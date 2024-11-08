@@ -38,8 +38,9 @@ export default defineComponent({
     },
     alterarDescricaoDaTarefaSelecionada(): void {
       if (this.tarefaSelecionada) {
-        this.store.dispatch(ALTERAR_TAREFA_DESCRICAO, this.tarefaSelecionada)
-        this.tarefaSelecionada = null
+        this.store
+          .dispatch(ALTERAR_TAREFA_DESCRICAO, this.tarefaSelecionada)
+          .then(this.cancelarTarefaSelecionada)
       }
     },
   },

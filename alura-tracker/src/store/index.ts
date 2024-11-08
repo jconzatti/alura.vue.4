@@ -99,8 +99,10 @@ export const store = createStore<IAppEstado>({
         .post('tarefas', pTarefa)
         .then((resposta) => commit(ADICIONAR_TAREFA, resposta.data))
     },
-    [ALTERAR_TAREFA_DESCRICAO](contexto, pTarefa: ITarefa) {
-      return clienteHTTP.patch(`tarefas/${pTarefa.id}`, { descricao: pTarefa.descricao })
+    [ALTERAR_TAREFA_DESCRICAO]({ commit }, pTarefa: ITarefa) {
+      return clienteHTTP
+        .patch(`tarefas/${pTarefa.id}`, { descricao: pTarefa.descricao })
+        .then((resposta) => commit(ALTERAR_TAREFA_DESCRICAO, resposta.data))
     },
   },
 })

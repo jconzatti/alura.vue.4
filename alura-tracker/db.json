@@ -25,7 +25,7 @@
     },
     {
       "id": "c9d9",
-      "descricao": "Como deleta isso?",
+      "descricao": "Pendência 8882",
       "duracaoEmSegundos": 3,
       "projeto": {
         "id": "dd1d",
@@ -34,7 +34,7 @@
     },
     {
       "id": "9391",
-      "descricao": "teste",
+      "descricao": "Implementar o front-end web com Vue3",
       "duracaoEmSegundos": 3,
       "projeto": {
         "id": "27b0",
