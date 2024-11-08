@@ -9,7 +9,7 @@ export interface IEstadoTarefa {
   tarefas: ITarefa[]
 }
 
-export const tarefa: Module<IEstadoTarefa, IEstado> = {
+export const moduloTarefa: Module<IEstadoTarefa, IEstado> = {
   mutations: {
     [DEFINIR_TAREFAS](state, pTarefas: ITarefa[]) {
       state.tarefas = pTarefas
@@ -34,7 +34,7 @@ export const tarefa: Module<IEstadoTarefa, IEstado> = {
     [ALTERAR_TAREFA_DESCRICAO]({ commit }, pTarefa: ITarefa) {
       return clienteHTTP
         .patch(`tarefas/${pTarefa.id}`, { descricao: pTarefa.descricao })
-        .then((resposta) => commit(ALTERAR_TAREFA_DESCRICAO, resposta.data))
+        .then((resposta) => commit(ATUALIZAR_TAREFA_DESCRICAO, resposta.data))
     },
   },
 }

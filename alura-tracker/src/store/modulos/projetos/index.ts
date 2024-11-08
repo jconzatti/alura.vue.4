@@ -19,7 +19,7 @@ export interface IEstadoProjeto {
   projetos: IProjeto[]
 }
 
-export const projeto: Module<IEstadoProjeto, IEstado> = {
+export const moduloProjeto: Module<IEstadoProjeto, IEstado> = {
   mutations: {
     [DEFINIR_PROJETOS](state, pProjetos: IProjeto[]) {
       state.projetos = pProjetos

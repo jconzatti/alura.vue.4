@@ -2,8 +2,8 @@ import type { InjectionKey } from 'vue'
 import { createStore, Store, useStore as vuexUseStore } from 'vuex'
 import { NOTIFICAR } from './tipoMutacao'
 import { type INotificacao } from '@/interfaces/INotificacao'
-import { projeto, type IEstadoProjeto } from './modulos/projetos'
-import { tarefa, type IEstadoTarefa } from './modulos/tarefas'
+import { moduloProjeto, type IEstadoProjeto } from './modulos/projetos'
+import { moduloTarefa, type IEstadoTarefa } from './modulos/tarefas'
 
 export interface IEstado {
   notificacoes: INotificacao[]
@@ -35,8 +35,8 @@ export const store = createStore<IEstado>({
     },
   },
   modules: {
-    projeto,
-    tarefa,
+    projeto: moduloProjeto,
+    tarefa: moduloTarefa,
   },
 })
 
