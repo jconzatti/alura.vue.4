@@ -1,9 +1,10 @@
 <script lang="ts">
 import { TipoNotificacao } from '@/interfaces/INotificacao'
 import { useStore } from '@/store'
-import { ADICIONAR_PROJETO, ATUALIZAR_PROJETO } from '@/store/tipoMutacao'
+import { ATUALIZAR_PROJETO } from '@/store/tipoMutacao'
 import { defineComponent } from 'vue'
 import useNotificador from '@/hooks/notificador'
+import { CADASTRAR_PROJETO } from '@/store/tipoAcao'
 
 export default defineComponent({
   name: 'FormularioProjeto',
@@ -26,7 +27,7 @@ export default defineComponent({
       if (this.id) {
         this.store.commit(ATUALIZAR_PROJETO, { id: this.id, nome: this.nomeDoProjeto })
       } else {
-        this.store.commit(ADICIONAR_PROJETO, this.nomeDoProjeto)
+        this.store.dispatch(CADASTRAR_PROJETO, this.nomeDoProjeto)
       }
       this.nomeDoProjeto = ''
       this.notificar(TipoNotificacao.SUCESSO, 'Sucesso', 'O projeto já está disponível')

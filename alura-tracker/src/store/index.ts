@@ -1,8 +1,16 @@
 import type IProjeto from '@/interfaces/IProjeto'
 import type { InjectionKey } from 'vue'
 import { createStore, Store, useStore as vuexUseStore } from 'vuex'
-import { ADICIONAR_PROJETO, ATUALIZAR_PROJETO, EXCLUIR_PROJETO, NOTIFICAR } from './tipoMutacao'
+import {
+  ADICIONAR_PROJETO,
+  ATUALIZAR_PROJETO,
+  DEFINIR_PROJETOS,
+  EXCLUIR_PROJETO,
+  NOTIFICAR,
+} from './tipoMutacao'
 import { type INotificacao } from '@/interfaces/INotificacao'
+import { CADASTRAR_PROJETO, OBTER_PROJETOS } from './tipoAcao'
+import clienteHTTP from '@/http'
 
 export interface IAppEstado {
   projetos: IProjeto[]
@@ -31,6 +39,9 @@ export const store = createStore<IAppEstado>({
     [EXCLUIR_PROJETO](state, pIDDoProjeto: string) {
       state.projetos = state.projetos.filter((lProjeto) => lProjeto.id !== pIDDoProjeto)
     },
+    [DEFINIR_PROJETOS](state, pProjetos: IProjeto[]) {
+      state.projetos = pProjetos
+    },
     [NOTIFICAR](state, pNotificacao: INotificacao) {
       pNotificacao.id = new Date().getTime()
       state.notificacoes.push(pNotificacao)
@@ -39,6 +50,14 @@ export const store = createStore<IAppEstado>({
           (lNotificacao) => lNotificacao.id !== pNotificacao.id,
         )
       }, 3000)
+    },
+  },
+  actions: {
+    [OBTER_PROJETOS]({ commit }) {
+      clienteHTTP.get('projetos').then((resposta) => commit(DEFINIR_PROJETOS, resposta.data))
+    },
+    [CADASTRAR_PROJETO](contexto, pNomeDoProjeto: string) {
+      clienteHTTP.post('projetos', { nome: pNomeDoProjeto })
     },
   },
 })

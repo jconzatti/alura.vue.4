@@ -1,6 +1,7 @@
 <script lang="ts">
 import type IProjeto from '@/interfaces/IProjeto'
 import { useStore } from '@/store'
+import { OBTER_PROJETOS } from '@/store/tipoAcao'
 import { EXCLUIR_PROJETO } from '@/store/tipoMutacao'
 import { computed, defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -17,6 +18,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    store.dispatch(OBTER_PROJETOS)
     return {
       store,
       projetos: computed(() => store.state.projetos),
