@@ -9,7 +9,7 @@ import {
   NOTIFICAR,
 } from './tipoMutacao'
 import { type INotificacao } from '@/interfaces/INotificacao'
-import { CADASTRAR_PROJETO, OBTER_PROJETOS } from './tipoAcao'
+import { ALTERAR_PROJETO, CADASTRAR_PROJETO, OBTER_PROJETOS } from './tipoAcao'
 import clienteHTTP from '@/http'
 
 export interface IAppEstado {
@@ -57,7 +57,10 @@ export const store = createStore<IAppEstado>({
       clienteHTTP.get('projetos').then((resposta) => commit(DEFINIR_PROJETOS, resposta.data))
     },
     [CADASTRAR_PROJETO](contexto, pNomeDoProjeto: string) {
-      clienteHTTP.post('projetos', { nome: pNomeDoProjeto })
+      return clienteHTTP.post('projetos', { nome: pNomeDoProjeto })
+    },
+    [ALTERAR_PROJETO](contexto, pProjeto: IProjeto) {
+      return clienteHTTP.put(`projetos/${pProjeto.id}`, pProjeto)
     },
   },
 })

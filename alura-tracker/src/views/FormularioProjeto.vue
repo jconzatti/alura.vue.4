@@ -1,10 +1,9 @@
 <script lang="ts">
 import { TipoNotificacao } from '@/interfaces/INotificacao'
 import { useStore } from '@/store'
-import { ATUALIZAR_PROJETO } from '@/store/tipoMutacao'
 import { defineComponent } from 'vue'
 import useNotificador from '@/hooks/notificador'
-import { CADASTRAR_PROJETO } from '@/store/tipoAcao'
+import { ALTERAR_PROJETO, CADASTRAR_PROJETO } from '@/store/tipoAcao'
 
 export default defineComponent({
   name: 'FormularioProjeto',
@@ -23,15 +22,21 @@ export default defineComponent({
     }
   },
   methods: {
-    salvarProjeto() {
-      if (this.id) {
-        this.store.commit(ATUALIZAR_PROJETO, { id: this.id, nome: this.nomeDoProjeto })
-      } else {
-        this.store.dispatch(CADASTRAR_PROJETO, this.nomeDoProjeto)
-      }
+    notificarSucessoAoSalvarProjeto() {
       this.nomeDoProjeto = ''
       this.notificar(TipoNotificacao.SUCESSO, 'Sucesso', 'O projeto já está disponível')
       this.$router.push('/projetos')
+    },
+    salvarProjeto() {
+      if (this.id) {
+        this.store
+          .dispatch(ALTERAR_PROJETO, { id: this.id, nome: this.nomeDoProjeto })
+          .then(this.notificarSucessoAoSalvarProjeto)
+      } else {
+        this.store
+          .dispatch(CADASTRAR_PROJETO, this.nomeDoProjeto)
+          .then(this.notificarSucessoAoSalvarProjeto)
+      }
     },
   },
   setup() {
