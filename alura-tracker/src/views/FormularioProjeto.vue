@@ -17,7 +17,7 @@ export default defineComponent({
   },
   mounted() {
     if (this.id) {
-      const lProjeto = this.store.state.projetos.find((p) => p.id === this.id)
+      const lProjeto = this.store.state.projeto.projetos.find((p) => p.id === this.id)
       this.nomeDoProjeto = lProjeto?.nome || ''
     }
   },
