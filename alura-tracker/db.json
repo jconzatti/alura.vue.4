@@ -12,5 +12,43 @@
       "id": "8fe6",
       "nome": "Alura Tracker"
     }
+  ],
+  "tarefas": [
+    {
+      "id": "abcd",
+      "descricao": "Configuração do ambiente",
+      "duracaoEmSegundos": 120,
+      "projeto": {
+        "id": "dd1d",
+        "nome": "BluLojas"
+      }
+    },
+    {
+      "id": "c9d9",
+      "descricao": "Como deleta isso?",
+      "duracaoEmSegundos": 3,
+      "projeto": {
+        "id": "dd1d",
+        "nome": "BluLojas"
+      }
+    },
+    {
+      "id": "9391",
+      "descricao": "teste",
+      "duracaoEmSegundos": 3,
+      "projeto": {
+        "id": "27b0",
+        "nome": "Envio Próprio"
+      }
+    },
+    {
+      "id": "8aca",
+      "descricao": "Refatoração do projeto com vuex",
+      "duracaoEmSegundos": 4,
+      "projeto": {
+        "id": "27b0",
+        "nome": "Envio Próprio"
+      }
+    }
   ]
 }
