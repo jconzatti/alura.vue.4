@@ -23,8 +23,12 @@ export const moduloTarefa: Module<IEstadoTarefa, IEstado> = {
     },
   },
   actions: {
-    [OBTER_TAREFAS]({ commit }) {
-      clienteHTTP.get('tarefas').then((resposta) => commit(DEFINIR_TAREFAS, resposta.data))
+    [OBTER_TAREFAS]({ commit }, pFiltroDescricao: string) {
+      let lURL: string = 'tarefas'
+      if (pFiltroDescricao) {
+        lURL += '?descricao=' + pFiltroDescricao
+      }
+      clienteHTTP.get(lURL).then((resposta) => commit(DEFINIR_TAREFAS, resposta.data))
     },
     [CADASTRAR_TAREFA]({ commit }, pTarefa: ITarefa) {
       return clienteHTTP

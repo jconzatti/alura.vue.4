@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref, watchEffect } from 'vue'
 import FormularioTarefa from '../components/FormularioTarefa.vue'
 import Tarefa from '../components/Tarefa.vue'
 import Box from '../components/Box.vue'
@@ -15,53 +15,110 @@ import type ITarefa from '@/interfaces/ITarefa'
 
 export default defineComponent({
   name: 'Tarefas',
-  data() {
-    return {
-      tarefaSelecionada: null as ITarefa | null,
-    }
-  },
   components: { FormularioTarefa, Tarefa, Box },
-  computed: {
-    fezAlgumaTarefa(): boolean {
-      if (this.tarefas) {
-        return this.tarefas.length > 0
-      }
-      return false
-    },
-  },
-  methods: {
-    salvarTarefa(pTarefa: ITarefa): void {
-      this.store.dispatch(CADASTRAR_TAREFA, pTarefa)
-    },
-    selecionarTarefa(pTarefa: ITarefa): void {
-      this.tarefaSelecionada = pTarefa
-    },
-    cancelarTarefaSelecionada(): void {
-      this.tarefaSelecionada = null
-    },
-    alterarDescricaoDaTarefaSelecionada(): void {
-      if (this.tarefaSelecionada) {
-        this.store
-          .dispatch(ALTERAR_TAREFA_DESCRICAO, this.tarefaSelecionada)
-          .then(this.cancelarTarefaSelecionada)
-      }
-    },
-  },
   setup() {
     const store = useStore()
     store.dispatch(OBTER_TAREFAS)
     store.dispatch(OBTER_PROJETOS)
+
+    const tarefas = computed(() => store.state.tarefa.tarefas)
+    const filtroDeDescricaoDaTarefa = ref('' as string)
+    // const tarefas = computed(() =>
+    //   store.state.tarefa.tarefas.filter(
+    //     (lTarefa) => !filtroDeTarefa.value || lTarefa.descricao.includes(filtroDeTarefa.value),
+    //   ),
+    // )
+    watchEffect(() => {
+      store.dispatch(OBTER_TAREFAS, filtroDeDescricaoDaTarefa.value)
+    })
+
+    const fezAlgumaTarefa = computed((): boolean => {
+      if (tarefas.value) {
+        return tarefas.value.length > 0
+      }
+      return false
+    })
+
+    const tarefaSelecionada = ref(null as ITarefa | null)
+
+    const salvarTarefa = (pTarefa: ITarefa): void => {
+      store.dispatch(CADASTRAR_TAREFA, pTarefa)
+    }
+    const selecionarTarefa = (pTarefa: ITarefa): void => {
+      tarefaSelecionada.value = pTarefa
+    }
+    const cancelarTarefaSelecionada = (): void => {
+      tarefaSelecionada.value = null
+    }
+    const alterarDescricaoDaTarefaSelecionada = (): void => {
+      if (tarefaSelecionada.value) {
+        store
+          .dispatch(ALTERAR_TAREFA_DESCRICAO, tarefaSelecionada.value)
+          .then(cancelarTarefaSelecionada)
+      }
+    }
+
     return {
-      store,
-      tarefas: computed<ITarefa[]>(() => store.state.tarefa.tarefas),
+      tarefas,
+      filtroDeDescricaoDaTarefa,
+      tarefaSelecionada,
+      fezAlgumaTarefa,
+      salvarTarefa,
+      selecionarTarefa,
+      cancelarTarefaSelecionada,
+      alterarDescricaoDaTarefaSelecionada,
     }
   },
+  // data() {
+  //   return {
+  //     tarefaSelecionada: null as ITarefa | null,
+  //   }
+  // },
+  // computed: {
+  //   fezAlgumaTarefa(): boolean {
+  //     if (this.tarefas) {
+  //       return this.tarefas.length > 0
+  //     }
+  //     return false
+  //   },
+  // },
+  // methods: {
+  //   salvarTarefa(pTarefa: ITarefa): void {
+  //     this.store.dispatch(CADASTRAR_TAREFA, pTarefa)
+  //   },
+  //   selecionarTarefa(pTarefa: ITarefa): void {
+  //     this.tarefaSelecionada = pTarefa
+  //   },
+  //   cancelarTarefaSelecionada(): void {
+  //     this.tarefaSelecionada = null
+  //   },
+  //   alterarDescricaoDaTarefaSelecionada(): void {
+  //     if (this.tarefaSelecionada) {
+  //       this.store
+  //         .dispatch(ALTERAR_TAREFA_DESCRICAO, this.tarefaSelecionada)
+  //         .then(this.cancelarTarefaSelecionada)
+  //     }
+  //   },
+  // },
 })
 </script>
 
 <template>
   <FormularioTarefa @evento-finalizar-tarefa="salvarTarefa" />
   <div class="lista">
+    <div class="field">
+      <p class="control has-icons-left">
+        <input
+          class="input"
+          type="text"
+          placeholder="Digite pera filtrar"
+          v-model="filtroDeDescricaoDaTarefa"
+        />
+        <span class="icon is-small is-left">
+          <i class="fas fa-search"></i>
+        </span>
+      </p>
+    </div>
     <Tarefa
       v-for="(lTarefa, i) in tarefas"
       :key="i"
