@@ -23,7 +23,10 @@ export default defineComponent({
   components: { FormularioTarefa, Tarefa, Box },
   computed: {
     fezAlgumaTarefa(): boolean {
-      return this.tarefas.length > 0
+      if (this.tarefas) {
+        return this.tarefas.length > 0
+      }
+      return false
     },
   },
   methods: {
@@ -50,7 +53,7 @@ export default defineComponent({
     store.dispatch(OBTER_PROJETOS)
     return {
       store,
-      tarefas: computed(() => store.state.tarefa.tarefas),
+      tarefas: computed<ITarefa[]>(() => store.state.tarefa.tarefas),
     }
   },
 })
