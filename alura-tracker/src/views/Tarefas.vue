@@ -12,10 +12,11 @@ import {
   OBTER_TAREFAS,
 } from '@/store/tipoAcao'
 import type ITarefa from '@/interfaces/ITarefa'
+import Modal from '../components/Modal.vue'
 
 export default defineComponent({
   name: 'Tarefas',
-  components: { FormularioTarefa, Tarefa, Box },
+  components: { FormularioTarefa, Tarefa, Box, Modal },
   setup() {
     const store = useStore()
     store.dispatch(OBTER_TAREFAS)
@@ -126,34 +127,31 @@ export default defineComponent({
       @evento-selecionar-tarefa="selecionarTarefa"
     />
     <Box v-if="!fezAlgumaTarefa"> Você não está muito produtivo hoje :( </Box>
-    <div v-if="tarefaSelecionada" class="modal" :class="{ 'is-active': tarefaSelecionada }">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Editando uma Tarefa</p>
-          <button class="delete" aria-label="close" @click="cancelarTarefaSelecionada"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field">
-            <label for="descricao-tarefa" class="label">Descrição</label>
-            <input
-              type="text"
-              class="input"
-              id="descricao-tarefa"
-              v-model="tarefaSelecionada.descricao"
-            />
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="buttons">
-            <button class="button is-success" @click="alterarDescricaoDaTarefaSelecionada">
-              Salvar alterações
-            </button>
-            <button class="button" @click="cancelarTarefaSelecionada">Cancelar</button>
-          </div>
-        </footer>
-      </div>
-    </div>
+    <Modal v-if="tarefaSelecionada" :visivel="tarefaSelecionada != null">
+      <template v-slot:cabecalho>
+        <p class="modal-card-title">Editando uma Tarefa</p>
+        <button class="delete" aria-label="close" @click="cancelarTarefaSelecionada"></button>
+      </template>
+      <template v-slot:corpo>
+        <div class="field">
+          <label for="descricao-tarefa" class="label">Descrição</label>
+          <input
+            type="text"
+            class="input"
+            id="descricao-tarefa"
+            v-model="tarefaSelecionada.descricao"
+          />
+        </div>
+      </template>
+      <template v-slot:rodape>
+        <div class="buttons">
+          <button class="button is-success" @click="alterarDescricaoDaTarefaSelecionada">
+            Salvar alterações
+          </button>
+          <button class="button" @click="cancelarTarefaSelecionada">Cancelar</button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
